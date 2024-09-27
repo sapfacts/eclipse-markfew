@@ -1,0 +1,13 @@
+@EndUserText: {
+  label: 'Service Definition for ZRAP620_C_InventoryTP_MHF'
+}
+@ObjectModel: {
+  leadingEntity: {
+    name: 'ZRAP620_C_InventoryTP_MHF'
+  }
+}
+define service ZRAP620_UI_INVENTORY_MHF
+  provider contracts odata_v4_ui {
+  expose ZRAP620_C_InventoryTP_MHF as Inventory;
+  expose ZRAP620_CE_PRODUCTS_MHF   as Products;
+}

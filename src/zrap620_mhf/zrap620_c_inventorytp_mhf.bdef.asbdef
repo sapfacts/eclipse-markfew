@@ -1,0 +1,18 @@
+projection implementation in class ZRAP620_BPC_InventoryTP_MHF unique;
+//strict ( 2 );
+strict;
+use draft;
+define behavior for ZRAP620_C_InventoryTP_MHF alias Inventory
+use etag
+
+{
+  use create;
+  use update;
+  use delete;
+
+  use action Edit;
+  use action Activate;
+  use action Discard;
+  use action Resume;
+  use action Prepare;
+}
