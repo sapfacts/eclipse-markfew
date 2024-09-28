@@ -1,16 +1,26 @@
 CLASS LHC_ZRAP100_R_TRAVELTP_MHF DEFINITION INHERITING FROM CL_ABAP_BEHAVIOR_HANDLER.
   PRIVATE SECTION.
+
+    CONSTANTS:
+      BEGIN OF travel_status,
+        open     TYPE c LENGTH 1 VALUE 'O', "Open
+        accepted TYPE c LENGTH 1 VALUE 'A', "Accepted
+        rejected TYPE c LENGTH 1 VALUE 'X', "Rejected
+      END OF travel_status.
+
     METHODS:
-      GET_GLOBAL_AUTHORIZATIONS FOR GLOBAL AUTHORIZATION
+      get_global_authorizations FOR GLOBAL AUTHORIZATION
         IMPORTING
-           REQUEST requested_authorizations FOR Travel
+        REQUEST requested_authorizations FOR Travel
         RESULT result,
       earlynumbering_create FOR NUMBERING
-            IMPORTING entities FOR CREATE Travel.
-ENDCLASS.
+        IMPORTING entities FOR CREATE Travel,
+      setStatusToOpen FOR DETERMINE ON MODIFY
+        IMPORTING keys FOR Travel~setStatusToOpen.
+  ENDCLASS.
 
-CLASS LHC_ZRAP100_R_TRAVELTP_MHF IMPLEMENTATION.
-  METHOD GET_GLOBAL_AUTHORIZATIONS.
+CLASS lhc_zrap100_r_traveltp_mhf IMPLEMENTATION.
+  METHOD get_global_authorizations.
   ENDMETHOD.
 
   METHOD earlynumbering_create.
@@ -81,6 +91,33 @@ CLASS LHC_ZRAP100_R_TRAVELTP_MHF IMPLEMENTATION.
                       %is_draft = entity-%is_draft
                     ) TO mapped-travel.
     ENDLOOP.
+
+  ENDMETHOD.
+
+  METHOD setStatusToOpen.
+
+    "Read travel instances of the transferred keys
+    READ ENTITIES OF ZRAP100_R_TravelTP_MHF IN LOCAL MODE
+     ENTITY Travel
+       FIELDS ( OverallStatus )
+       WITH CORRESPONDING #( keys )
+     RESULT DATA(travels)
+     FAILED DATA(read_failed).
+
+    "If overall travel status is already set, do nothing, i.e. remove such instances
+    DELETE travels WHERE OverallStatus IS NOT INITIAL.
+    CHECK travels IS NOT INITIAL.
+
+    "else set overall travel status to open ('O')
+    MODIFY ENTITIES OF ZRAP100_R_TravelTP_MHF IN LOCAL MODE
+      ENTITY Travel
+        UPDATE SET FIELDS
+        WITH VALUE #( FOR travel IN travels ( %tky    = travel-%tky
+                                              OverallStatus = travel_status-open ) )
+    REPORTED DATA(update_reported).
+
+    "Set the changing parameter
+    reported = CORRESPONDING #( DEEP update_reported ).
 
   ENDMETHOD.
 
