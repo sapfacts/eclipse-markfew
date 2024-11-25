@@ -1,0 +1,33 @@
+{
+  "formatVersion": "1",
+  "header": {
+    "description": "Travel App",
+    "originalLanguage": "en",
+    "abapLanguageVersion": "cloudDevelopment"
+  },
+  "generalInformation": {
+    "appType": "ui5",
+    "catalogId": "SAP_TC_UI5_REPO_UIAD"
+  },
+  "ui5AppDetails": {
+    "appId": "ztravelappmhf"
+  },
+  "navigation": {
+    "targetMappingId": "UI5R_122CFAE3B93F0D6A7FAEC3B7A14B07F8D0093907_TM",
+    "semanticObject": "ztravel_app_mhf",
+    "action": "display",
+    "desktop": true,
+    "tablet": true,
+    "phone": true
+  },
+  "tiles": [
+    {
+      "id": "UI5R_122CFAE3B93F0D6A7FAEC3B7A14B07F8D0093907_AL",
+      "tileType": "static",
+      "isDefault": true,
+      "standard": {
+        "title": "Travel App"
+      }
+    }
+  ]
+}

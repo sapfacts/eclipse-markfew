@@ -95,7 +95,9 @@ CLASS zrap620_sc_products_mhf DEFINITION
 ENDCLASS.
 
 
-CLASS zrap620_sc_products_mhf IMPLEMENTATION.
+
+CLASS ZRAP620_SC_PRODUCTS_MHF IMPLEMENTATION.
+
 
   METHOD /iwbep/if_v4_mp_basic_pm~define.
 
@@ -256,6 +258,4 @@ CLASS zrap620_sc_products_mhf IMPLEMENTATION.
     lo_primitive_property->set_is_nullable( ).
 
   ENDMETHOD.
-
-
 ENDCLASS.

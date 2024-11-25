@@ -11,7 +11,9 @@ ENDCLASS.
 
 
 
-CLASS zcl_generate_travel_data_mhf IMPLEMENTATION.
+CLASS ZCL_GENERATE_TRAVEL_DATA_MHF IMPLEMENTATION.
+
+
   METHOD if_oo_adt_classrun~main.
 
     DATA itab TYPE TABLE OF ztravel_mhf.
@@ -37,4 +39,3 @@ CLASS zcl_generate_travel_data_mhf IMPLEMENTATION.
 
   ENDMETHOD.
 ENDCLASS.
-

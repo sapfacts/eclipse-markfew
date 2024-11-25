@@ -34,66 +34,8 @@ ENDCLASS.
 
 
 
-CLASS zrap620_cl_ce_products_mhf IMPLEMENTATION.
+CLASS ZRAP620_CL_CE_PRODUCTS_MHF IMPLEMENTATION.
 
-
-  METHOD if_oo_adt_classrun~main.
-
-    DATA business_data TYPE t_business_data.
-    DATA filter_conditions  TYPE if_rap_query_filter=>tt_name_range_pairs .
-    DATA ranges_table TYPE if_rap_query_filter=>tt_range_option .
-    ranges_table = VALUE #( (  sign = 'I' option = 'GE' low = 'HT-1200' ) ).
-    filter_conditions = VALUE #( ( name = 'PRODUCT'  range = ranges_table ) ).
-
-    TRY.
-        get_products(
-          EXPORTING
-            it_filter_cond    = filter_conditions
-            top               =  3
-            skip              =  1
-          IMPORTING
-            et_business_data  = business_data
-          ) .
-        out->write( business_data ).
-      CATCH cx_root INTO DATA(exception).
-        out->write( cl_message_helper=>get_latest_t100_exception( exception )->if_message~get_longtext( ) ).
-    ENDTRY.
-
-  ENDMETHOD.
-
-  METHOD if_rap_query_provider~select.
-    DATA business_data TYPE t_business_data.
-    DATA business_data_external TYPE t_business_data_external.
-    DATA(top)     = io_request->get_paging( )->get_page_size( ).
-    DATA(skip)    = io_request->get_paging( )->get_offset( ).
-    DATA(requested_fields)  = io_request->get_requested_elements( ).
-    DATA(sort_order)    = io_request->get_sort_elements( ).
-
-    TRY.
-        DATA(filter_condition) = io_request->get_filter( )->get_as_ranges( ).
-
-        get_products(
-                 EXPORTING
-                   it_filter_cond    = filter_condition
-                   top               = CONV i( top )
-                   skip              = CONV i( skip )
-                 IMPORTING
-                   et_business_data  = business_data
-                 ) .
-
-        business_data_external = CORRESPONDING #( business_data
-                                          MAPPING Product = product
-                                                  ProductCategory = product_category
-                                                  Supplier = supplier
-                                                   ).
-
-        io_response->set_total_number_of_records( lines( business_data_external ) ).
-        io_response->set_data( business_data_external ).
-
-      CATCH cx_root INTO DATA(exception).
-        DATA(exception_message) = cl_message_helper=>get_latest_t100_exception( exception )->if_message~get_longtext( ).
-    ENDTRY.
-  ENDMETHOD.
 
   METHOD get_products.
 
@@ -147,4 +89,63 @@ CLASS zrap620_cl_ce_products_mhf IMPLEMENTATION.
     read_list_response->get_business_data( IMPORTING et_business_data = et_business_data ).
   ENDMETHOD.
 
+
+  METHOD if_oo_adt_classrun~main.
+
+    DATA business_data TYPE t_business_data.
+    DATA filter_conditions  TYPE if_rap_query_filter=>tt_name_range_pairs .
+    DATA ranges_table TYPE if_rap_query_filter=>tt_range_option .
+    ranges_table = VALUE #( (  sign = 'I' option = 'GE' low = 'HT-1200' ) ).
+    filter_conditions = VALUE #( ( name = 'PRODUCT'  range = ranges_table ) ).
+
+    TRY.
+        get_products(
+          EXPORTING
+            it_filter_cond    = filter_conditions
+            top               =  3
+            skip              =  1
+          IMPORTING
+            et_business_data  = business_data
+          ) .
+        out->write( business_data ).
+      CATCH cx_root INTO DATA(exception).
+        out->write( cl_message_helper=>get_latest_t100_exception( exception )->if_message~get_longtext( ) ).
+    ENDTRY.
+
+  ENDMETHOD.
+
+
+  METHOD if_rap_query_provider~select.
+    DATA business_data TYPE t_business_data.
+    DATA business_data_external TYPE t_business_data_external.
+    DATA(top)     = io_request->get_paging( )->get_page_size( ).
+    DATA(skip)    = io_request->get_paging( )->get_offset( ).
+    DATA(requested_fields)  = io_request->get_requested_elements( ).
+    DATA(sort_order)    = io_request->get_sort_elements( ).
+
+    TRY.
+        DATA(filter_condition) = io_request->get_filter( )->get_as_ranges( ).
+
+        get_products(
+                 EXPORTING
+                   it_filter_cond    = filter_condition
+                   top               = CONV i( top )
+                   skip              = CONV i( skip )
+                 IMPORTING
+                   et_business_data  = business_data
+                 ) .
+
+        business_data_external = CORRESPONDING #( business_data
+                                          MAPPING Product = product
+                                                  ProductCategory = product_category
+                                                  Supplier = supplier
+                                                   ).
+
+        io_response->set_total_number_of_records( lines( business_data_external ) ).
+        io_response->set_data( business_data_external ).
+
+      CATCH cx_root INTO DATA(exception).
+        DATA(exception_message) = cl_message_helper=>get_latest_t100_exception( exception )->if_message~get_longtext( ).
+    ENDTRY.
+  ENDMETHOD.
 ENDCLASS.

@@ -11,7 +11,10 @@ PROTECTED SECTION.
  PRIVATE SECTION.
 ENDCLASS.
 
-CLASS zcl_rap100_gen_data_mhf IMPLEMENTATION.
+
+
+CLASS ZCL_RAP100_GEN_DATA_MHF IMPLEMENTATION.
+
 
 METHOD if_oo_adt_classrun~main.
  DATA:
@@ -58,4 +61,4 @@ METHOD if_oo_adt_classrun~main.
   COMMIT WORK.
   out->write( |[RAP100] Demo data generated for table ZRAP100_ATRAV{ group_id }. | ).
   ENDMETHOD.
-  ENDCLASS.
+ENDCLASS.

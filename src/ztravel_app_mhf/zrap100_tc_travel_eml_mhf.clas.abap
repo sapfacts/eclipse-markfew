@@ -36,7 +36,9 @@ ENDCLASS.
 
 
 
-CLASS zrap100_tc_travel_eml_mhf IMPLEMENTATION.
+CLASS ZRAP100_TC_TRAVEL_EML_MHF IMPLEMENTATION.
+
+
   METHOD class_setup.
     " create the test doubles for the underlying CDS entities
     cds_test_environment = cl_cds_test_environment=>create_for_multiple_cds(
@@ -61,27 +63,13 @@ CLASS zrap100_tc_travel_eml_mhf IMPLEMENTATION.
                                     price = '2000' currency_code = 'EUR' ) ).
   ENDMETHOD.
 
+
   METHOD class_teardown.
     " remove test doubles
     cds_test_environment->destroy(  ).
     sql_test_environment->destroy(  ).
   ENDMETHOD.
 
-  METHOD setup.
-    " clear the test doubles per test
-    cds_test_environment->clear_doubles(  ).
-    sql_test_environment->clear_doubles(  ).
-    " insert test data into test doubles
-    sql_test_environment->insert_test_data( agency_mock_data   ).
-    sql_test_environment->insert_test_data( customer_mock_data ).
-    sql_test_environment->insert_test_data( carrier_mock_data  ).
-    sql_test_environment->insert_test_data( flight_mock_data   ).
-  ENDMETHOD.
-
-  METHOD teardown.
-    " clean up any involved entity
-    ROLLBACK ENTITIES.
-  ENDMETHOD.
 
   METHOD create_with_action.
     " create a complete composition: Travel (root)
@@ -144,4 +132,21 @@ CLASS zrap100_tc_travel_eml_mhf IMPLEMENTATION.
 
   ENDMETHOD.
 
+
+  METHOD setup.
+    " clear the test doubles per test
+    cds_test_environment->clear_doubles(  ).
+    sql_test_environment->clear_doubles(  ).
+    " insert test data into test doubles
+    sql_test_environment->insert_test_data( agency_mock_data   ).
+    sql_test_environment->insert_test_data( customer_mock_data ).
+    sql_test_environment->insert_test_data( carrier_mock_data  ).
+    sql_test_environment->insert_test_data( flight_mock_data   ).
+  ENDMETHOD.
+
+
+  METHOD teardown.
+    " clean up any involved entity
+    ROLLBACK ENTITIES.
+  ENDMETHOD.
 ENDCLASS.
